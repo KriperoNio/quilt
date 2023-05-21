@@ -1,0 +1,10 @@
+Column(
+            children: <Widget>[
+              Expanded(
+                child: VideosScreen(),
+              ),
+              Expanded(
+                child: VideosScreen(),
+              ),
+            ],
+          ),
