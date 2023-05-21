@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'materials/MainMaterials.dart';
+import '../materials/MainMaterials.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage ({super.key});
