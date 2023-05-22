@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
-import 'package:quilt/pages/MainPage.dart';
+import 'package:quilt/pages/navigation_bar_tabs/MainPage.dart';
 
 void main() {
   debugPaintSizeEnabled = false;
@@ -34,6 +34,9 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.greenAccent,
       ),
       home: const MainPage(),
+      // routes: {
+      //   '/': ((context) => const MainPage())
+      // },
     );
   }
 }
