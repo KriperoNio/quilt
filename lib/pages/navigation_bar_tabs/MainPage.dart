@@ -18,7 +18,7 @@ class MainPage extends StatelessWidget {
         ),
         const Scaffold(
           backgroundColor: Colors.transparent,
-          bottomNavigationBar: NabigationBarMain(),
+          bottomNavigationBar: NavigationBarMain(),
           body: VideosScreen(),
         ),
       ]
@@ -26,14 +26,14 @@ class MainPage extends StatelessWidget {
   }
 }
 
-class NabigationBarMain extends StatefulWidget {
-  const NabigationBarMain({super.key});
+class NavigationBarMain extends StatefulWidget {
+  const NavigationBarMain({super.key});
 
   @override
-  NabigationBarMainState createState() => NabigationBarMainState();
+  NavigationBarMainState createState() => NavigationBarMainState();
 }
 
-class NabigationBarMainState extends State<NabigationBarMain> {
+class NavigationBarMainState extends State<NavigationBarMain> {
   var currentIndex = 0;
 
   @override
