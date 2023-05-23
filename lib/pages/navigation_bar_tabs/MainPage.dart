@@ -16,104 +16,29 @@ class MainPage extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
       ),
-      const Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: NavigationBarMain(),
-        body: VideosScreen(),
-      ),
+      const Column(
+        children: [
+          Flexible(
+            child: Expanded(
+              child: VideosScreen(),
+            ),
+          ),
+          Flexible(
+            child: SizedBox(
+              height: 500,
+            ),
+          ),
+        ],
+      )
     ]);
   }
 }
 
-class NavigationBarMain extends StatefulWidget {
-  const NavigationBarMain({super.key});
-
-  @override
-  NavigationBarMainState createState() => NavigationBarMainState();
-}
-
-class NavigationBarMainState extends State<NavigationBarMain> {
-  var currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      margin: const EdgeInsets.all(20),
-      height: size.width * .155,
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(0, 0, 0, 0.199),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.15),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: ListView.builder(
-        itemCount: listOfIcons.length,
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: size.width * .024),
-        itemBuilder: (context, index) => InkWell(
-          onTap: () {
-            setState(
-              () {
-                currentIndex = index;
-              },
-            );
-          },
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 1500),
-                curve: Curves.fastLinearToSlowEaseIn,
-                margin: EdgeInsets.only(
-                  bottom: index == currentIndex ? 0 : size.width * .029,
-                  right: size.width * .0422,
-                  left: size.width * .0422,
-                ),
-                width: size.width * .128,
-                height: index == currentIndex ? size.width * .014 : 0,
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(10),
-                  ),
-                ),
-              ),
-              Icon(
-                listOfIcons[index],
-                size: size.width * .076,
-                color: index == currentIndex
-                    ? Colors.green
-                    : Colors.greenAccent[200],
-              ),
-              SizedBox(height: size.width * .03),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<IconData> listOfIcons = [
-    Icons.home_rounded,
-    Icons.video_camera_back_outlined,
-    Icons.settings_rounded,
-    Icons.settings_rounded,
-  ];
-}
 
 final videos = [
   'assets/videos/Water_3.mp4',
   'assets/videos/Black_Coffee.mp4',
-  "assets/videos/Flower_3.mp4",
-  "assets/videos/high_rise_skyscraper_flags_410.mp4"
+  "assets/videos/Flower_3.mp4"
 ];
 
 class VideosScreen extends StatefulWidget {
@@ -124,6 +49,8 @@ class VideosScreen extends StatefulWidget {
 
 class _VideosScreenState extends State<VideosScreen> {
   late PageController _pageController;
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -144,8 +71,12 @@ class _VideosScreenState extends State<VideosScreen> {
       itemBuilder: (context, index) {
         return VideoCard(
           assetPath: videos[index],
+          isSelected: _selectedIndex == index,
         );
       },
+      onPageChanged: (i) => setState(
+        () => _selectedIndex = i,
+      ),
     );
   }
 }
@@ -154,17 +85,21 @@ class VideoCard extends StatefulWidget {
   const VideoCard({
     super.key,
     required this.assetPath,
+    required this.isSelected,
   });
 
   final String assetPath;
+
+  final bool isSelected;
 
   @override
   State<VideoCard> createState() => _VideoCardState();
 }
 
 class _VideoCardState extends State<VideoCard> {
-  late VideoPlayerController _controller;
   final GlobalKey _videoKey = GlobalKey();
+
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
@@ -175,8 +110,9 @@ class _VideoCardState extends State<VideoCard> {
       ..addListener(() => setState(() {}))
       ..setLooping(true)
       ..setVolume(0)
-      ..initialize().then((_) => setState(() {}));
-    _controller.play();
+      ..initialize().then((_) => setState(() {}))
+      ..play();
+    // _controller.play();
   }
 
   @override
@@ -190,7 +126,9 @@ class _VideoCardState extends State<VideoCard> {
     _controller.play();
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      margin: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      margin: widget.isSelected
+          ? const EdgeInsets.symmetric(vertical: 16, horizontal: 0)
+          : const EdgeInsets.symmetric(vertical: 32, horizontal: 22),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
